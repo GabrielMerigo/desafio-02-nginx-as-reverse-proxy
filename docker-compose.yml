@@ -7,7 +7,7 @@ services:
             dockerfile: Dockerfile
         container_name: node-c
         ports:
-            - 8888:8888
+            - 9000:9000
         depends_on:
             - mydb
     nginx:
@@ -18,7 +18,7 @@ services:
             dockerfile: Dockerfile
         container_name: reverse-proxy
         ports:
-            - 9999:9999  
+            - 8080:8080  
         
     mydb:
         container_name: mydb
