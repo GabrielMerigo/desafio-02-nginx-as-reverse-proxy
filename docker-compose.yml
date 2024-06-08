@@ -2,14 +2,20 @@ version: "3.8"
 services:
     server:
         image: server
+        volumes:
+            - ./server:/usr/src/app
         build:
             context: ./server
             dockerfile: Dockerfile
         container_name: node-c
+        entrypoint: dockerize -wait tcp://mydb:3306 -timeout 20s npm start
         ports:
             - 9000:9000
         depends_on:
             - mydb
+        networks:
+            - my-bridge-network
+
     nginx:
         image: reverse-proxy
         restart: always
@@ -18,7 +24,9 @@ services:
             dockerfile: Dockerfile
         container_name: reverse-proxy
         ports:
-            - 8080:8080  
+            - 8080:8080
+        networks:
+            - my-bridge-network
         
     mydb:
         container_name: mydb
@@ -32,3 +40,9 @@ services:
         environment:
             - MYSQL_DATABASE=nodedb
             - MYSQL_ROOT_PASSWORD=root
+        networks:
+            - my-bridge-network
+
+networks:
+    my-bridge-network:
+        driver: bridge
