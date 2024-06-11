@@ -4,11 +4,11 @@ services:
         image: server
         volumes:
             - ./server:/usr/src/app
+            - /usr/src/app/node_modules
         build:
             context: ./server
             dockerfile: Dockerfile
         container_name: node-c
-        entrypoint: dockerize -wait tcp://mydb:3306 -timeout 20s npm start
         ports:
             - 9000:9000
         depends_on:

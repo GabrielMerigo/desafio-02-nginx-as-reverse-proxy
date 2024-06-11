@@ -8,7 +8,7 @@ RUN apk update --no-cache \
     && wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \
     && apk del wget
 
-COPY package.json .
-RUN npm i
-COPY . .
-CMD ["npm", "start"]
+COPY package.json . 
+RUN npm install
+COPY . . 
+CMD ["dockerize", "-wait", "tcp://mydb:3306", "-timeout", "20s", "npm", "start"]
